@@ -9,6 +9,8 @@ export const WEATHER_KEYS={
     forecast:(coords:Coordinates)=>['forecast',coords] as const,
     location:(coords:Coordinates)=>['location',coords] as const,
     search:(query:string)=>['location-search',query] as const,
+    airQuality:(coords:Coordinates)=>['air-quality',coords] as const,
+    uvIndex:(coords:Coordinates)=>['uv-index',coords] as const,
 } as const;
 
 //for loading and navigating to different cities , if we visit the same city page within 5/6 mins we dont want to fetch entire weather data again, but to see the previous data
@@ -46,5 +48,21 @@ export function useLocationSearch(query:string){
         queryFn:()=>weatherAPI.searchLocations(query), 
         enabled:query.length>=3,
 
+    })
+}
+
+export function useAirQualityQuery(coordinates:Coordinates | null){
+    return useQuery({
+        queryKey: WEATHER_KEYS.airQuality(coordinates ?? {lat:0,lon:0}),
+        queryFn:()=>coordinates?weatherAPI.getAirQuality(coordinates):null,
+        enabled:!!coordinates,
+    })
+}
+
+export function useUVIndexQuery(coordinates:Coordinates | null){
+    return useQuery({
+        queryKey: WEATHER_KEYS.uvIndex(coordinates ?? {lat:0,lon:0}),
+        queryFn:()=>coordinates?weatherAPI.getUVIndex(coordinates):null,
+        enabled:!!coordinates,
     })
 }

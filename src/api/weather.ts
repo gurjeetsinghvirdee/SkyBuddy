@@ -1,5 +1,5 @@
 import { API_CONFIG } from "./config"
-import type { Coordinates, ForecastData, GeocodingResponse, WeatherData } from "./types";
+import type { Coordinates, ForecastData, GeocodingResponse, WeatherData, AirQualityData, UVIndexData } from "./types";
 
 class WeatherAPI{
     private createUrl(endpoint:string,params:Record<string,string | number>)
@@ -57,6 +57,24 @@ class WeatherAPI{
         });
         
         return this.fetchData<GeocodingResponse[]>(url);
+    }
+
+    async getAirQuality({lat,lon}:Coordinates):Promise<AirQualityData>{
+        const url=this.createUrl(`${API_CONFIG.BASE_URL}/air_pollution`,{
+            lat:lat.toString(),
+            lon:lon.toString(),
+        });
+        
+        return this.fetchData<AirQualityData>(url);
+    }
+
+    async getUVIndex({lat,lon}:Coordinates):Promise<UVIndexData>{
+        const url=this.createUrl(`${API_CONFIG.BASE_URL}/uvi`,{
+            lat:lat.toString(),
+            lon:lon.toString(),
+        });
+        
+        return this.fetchData<UVIndexData>(url);
     }
 }
 

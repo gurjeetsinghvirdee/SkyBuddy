@@ -58,3 +58,30 @@ export interface GeocodingResponse {
     country:string;
     state?:string;
 }
+
+export interface AirQualityData {
+    list: Array<{
+        main: {
+            aqi: number; // Air Quality Index: 1=Good, 2=Fair, 3=Moderate, 4=Poor, 5=Very Poor
+        };
+        components: {
+            co: number;
+            no: number;
+            no2: number;
+            o3: number;
+            so2: number;
+            pm2_5: number;
+            pm10: number;
+            nh3: number;
+        };
+        dt: number;
+    }>;
+}
+
+export interface UVIndexData {
+    lat: number;
+    lon: number;
+    date_iso: string;
+    date: number;
+    value: number;
+}

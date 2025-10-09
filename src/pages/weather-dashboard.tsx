@@ -3,12 +3,13 @@ import { useGeolocation } from "@/hooks/use-geolocation";
 import { AlertTriangle, MapPin, RefreshCcw } from "lucide-react";
 import WeatherSkeleton from '@/components/loading-skeleton'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { useForecastQuery, useReverseGeocodeQuery, useWeatherQuery } from "@/hooks/use-weather";
+import { useForecastQuery, useReverseGeocodeQuery, useWeatherQuery, useAirQualityQuery, useUVIndexQuery } from "@/hooks/use-weather";
 import CurrentWeather from "@/components/currentWeather";
 import HourlyTemp from "@/components/hourly-temp";
 import WeatherDetails from "@/components/weather-details";
 import WeatherForecast from "@/components/weather-forecast";
 import FavoriteCities from "@/components/favorite-cities";
+import HealthRecommendations from "@/components/health-recommendations";
 
 const WeatherDashboard = () => {
   const {coordinates,error:locationError,getLocation,isLoading:locationLoading}=useGeolocation();
@@ -17,6 +18,8 @@ const WeatherDashboard = () => {
   console.log('Reverse geocode data:', locationQuery.data);
   const weatherQuery=useWeatherQuery(coordinates);
   const forecastQuery=useForecastQuery(coordinates);
+  const airQualityQuery=useAirQualityQuery(coordinates);
+  const uvIndexQuery=useUVIndexQuery(coordinates);
 
   console.log(weatherQuery.data)
 
@@ -103,6 +106,13 @@ const WeatherDashboard = () => {
        
       </div>
       </div>
+
+          {/* Health Recommendations */}
+          <HealthRecommendations 
+            airQuality={airQualityQuery.data ?? undefined}
+            uvIndex={uvIndexQuery.data ?? undefined}
+            isLoading={airQualityQuery.isFetching || uvIndexQuery.isFetching}
+          />
 
           <div className="grid gap-6 md:grid-cols-2 items-start">
               {/* details */}
